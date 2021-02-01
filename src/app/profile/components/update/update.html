@@ -1,0 +1,237 @@
+<div class="padding-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <profile-sliderbar></profile-sliderbar>
+      </div>
+      <div class="col-sm-9">
+        <div class="panel panel-default">
+          <form role="form" #frm="ngForm" (submit)="submit(frm)" ngNativeValidate method="post">
+            <div class="panel-heading resume-heading">
+              <div class="row">
+                <div class="col-sm-5">
+                  <figure>
+                    <img class="img-circle img-responsive" class="avatar" width="100%" [src]="avatarUrl">
+                  </figure>
+                  <file-upload [options]="avatarOptions"></file-upload>
+                </div>
+                <div class="col-sm-7">
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <i class="fa fa-user"></i>&nbsp; <span translate >Name</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" autocomplete="off" placeholder="{{'Enter your name' | translate}}" [(ngModel)]="info.name"   name="name" #name="ngModel" />
+                          <div *ngIf="name.errors && (name.dirty || name.touched || isSubmitted)">
+                            <p [hidden]="!name.errors.required" style="color:red" translate> Please enter user first name and last name! </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-envelope"></i>&nbsp; <span translate >Email ({{ info.emailVerified ? '*' : 'optional' }})</span>
+                        </div>
+                        <div class="col-sm-9">
+                         
+                          <div class="input-group mb-3">
+                            <input type="email" class="form-control" autocomplete="off" placeholder="user@example.com" [(ngModel)]="info.email" name="email"  #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [disabled]="emailExists === true && info.emailVerified" />
+                            
+                            <div class="input-group-append">
+                              <button *ngIf="!info.emailVerified" class="btn btn-primary" (click)="verifyEmail(info.email)" type="button">Verify</button>
+                            </div>
+                          </div>
+
+                          
+                        </div>
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                          <div *ngIf="email.errors && (email.dirty || email.touched || isSubmitted)">
+                            <p [hidden]="!email.errors.required" style="color:red" translate> Email is required </p>
+                            <p [hidden]="!email.errors.pattern" style="color:red" translate> Please enter a valid email address </p>
+                          </div>
+                       
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-phone"></i>&nbsp; <span translate>Phone</span>
+                        </div>
+                        <div class="col-sm-6">
+                          <input class="dialphone" class="form-control w-85"  autocomplete="off"
+                            name="phone" #phone="ngModel" [(ngModel)]="info.phoneNumber" (ngModelChange)="changePhoneNumber($event)" >
+                      
+                        </div>
+                        <div class="col-sm-3">
+                          <!-- <input type="button" class="btn btn-primary" name="Verify" value="Verify" *ngIf="!isVerified" (click)="verifyPhone()">
+                          <span *ngIf="isVerified">Verified</span> -->
+                          <app-phoneverify  [dialCode]="" [phoneNumber]="info.phoneNumber" [isVerified]="isVerified"
+                          [isInValid]="phone.errors "
+                          (approve)="onVerifyApprove($event)"></app-phoneverify>
+                        </div>
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-9">
+                          <p class="text-danger small" *ngIf="!info.phoneNumber">Please Enter Phone Number</p>
+                        </div>
+                      </div>
+
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-location-arrow"></i>&nbsp; <span translate>Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" autocomplete="off" [(ngModel)]="info.address" #address="ngModel" name="address" />
+                         
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <i class="fa fa-unlock-alt"></i>&nbsp; <span translate >Password</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="password" class="form-control" autocomplete="off" [(ngModel)]="info.password" name="user-password" #password="ngModel" minlength="6" />
+                          <div *ngIf="password.errors && (password.dirty || password.touched || isSubmitted)">
+                            <p [hidden]="!password.errors.minlength" style="color:red" translate> Password must be at least 6 characters! </p>
+                          </div>
+                          <p class="help help-block">
+                            <small translate>Blank to keep current password</small>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+
+                   
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><i class="fa fa-transgender"></i>&nbsp; <span translate>Gender</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input type="radio" value="male" name="gender" [(ngModel)]="info.gender"> Male
+                          <input type="radio" value="female" name="gender" [(ngModel)]="info.gender"> Female
+                        </div>
+                      </div>
+                    </li>
+
+                    
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Street Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" autocomplete="off" [(ngModel)]="info.streetAddress" name="streetAddress" />
+                        </div>
+                      </div>
+                    </li>
+
+                    
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Country</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <select class="form-control" autocomplete="off" [(ngModel)]="info.country" #country="ngModel" name="country"  (change)="loadStates(info.country)" required>
+                            <option value=""> Choose Country</option>
+                            <option *ngFor="let item of countries" [ngValue]="item.name">{{item.name}}</option>
+                          </select>
+                          <!-- <input class="form-control" [(ngModel)]="info.country" #country="ngModel" name="country" required/> -->
+                          <div *ngIf="country.errors " >
+                            <p [hidden]="!country.errors.pattern" class="error" translate> 'Country' field must contain only alphabets </p>
+                            <p [hidden]="!country.errors.required" class="error" translate> 'Country' field is required </p>
+  
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>State</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <select class="form-control" autocomplete="off" [(ngModel)]="info.state" name="state" #state="ngModel"  (change)="loadCities(info.state)" required>
+                            <option value=""> Choose State</option>
+                            
+                            <option *ngFor="let item of states" [ngValue]="item.name">{{item.name}}</option>
+                          </select>
+                          <!-- <input class="form-control" [(ngModel)]="info.state" name="state" #state="ngModel" pattern="[A-Za-z\s]+" required /> -->
+                          <div *ngIf="state.errors " >
+                            <p [hidden]="!state.errors.pattern" class="error" translate> 'State' field must contain only alphabets </p>
+                            <p [hidden]="!state.errors.required" class="error" translate> 'State' field is required </p>
+
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>City</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <!-- <select class="form-control" autocomplete="off" [(ngModel)]="info.city" name="city" #city="ngModel" >
+                            <option value=""> Choose City</option>  
+                            <option *ngFor="let item of cities" [ngValue]="item.name">{{item.name}}</option>
+                          </select> -->
+                          <input class="form-control" [(ngModel)]="info.city" name="city" #city="ngModel" pattern="[A-Za-z\s]+" required/>
+                          <div *ngIf="city.errors">
+                            <p [hidden]="!city.errors.pattern" class="error" translate> 'City' field must contain only alphabets </p>
+                            <p [hidden]="!city.errors.required" class="error" translate> 'City' field is Required </p>
+
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                   
+
+                    <li class="list-group-item">
+                          <div class="row">
+                            <div class="col-md-3"><span translate>Zip Code</span>
+                            </div>
+                            <div class="col-sm-9">
+                              <input class="form-control" autocomplete="off" [(ngModel)]="info.zipCode" #zipcode="ngModel" name="zipCode" />
+                              <div *ngIf="zipcode.errors " >
+                                <p [hidden]="!zipcode.errors.required" class="error" translate> 'Zipcode' is required</p>
+                              </div>
+                            </div>
+                            
+                          </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-3"><span translate>Shipping Address</span>
+                        </div>
+                        <div class="col-sm-9">
+                          <input class="form-control" autocomplete="off" [(ngModel)]="info.shippingAddress" name="shippingAddress" />
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit" translate>Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

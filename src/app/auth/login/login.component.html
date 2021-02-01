@@ -1,0 +1,106 @@
+
+<a (click)="showModal()"><i class="fa fa-lock mr-1"></i> <span translate>Login</span></a>
+
+<div *ngIf="backdrop">
+  <div class="modal-backdrop show"></div>
+</div>
+
+<div class="fade modal text-left " id="loginModal"  #loginModal >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content ">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{showLogin ? 'Sign In': 'Forget Password?'}}</h4>
+        <button type="button"  (click)="hideModal()" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body p-0">
+        <div class="card" *ngIf="showLogin">
+          <article class="card-body login-form">
+            <form class="form-horizontal form-material" (submit)="login(frm)" #frm="ngForm">
+             
+              <div *ngIf="!otp">
+                <div class="form-group" >
+                  <div class="col-xs-12">
+                    <input class="form-control" id="login-inp" placeholder="{{'Email or Phone' | translate}}" required type="text" autocomplete="off"  name="value" #value="ngModel"  [(ngModel)]="credentials.value" />
+                    <div *ngIf="value.errors && (value.dirty || value.touched || submitted)">
+                      <p [hidden]="!value.errors.required" class="error" translate> This Field is required </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group"> 
+                  <div class="form-group text-right mt-2" >
+                    <button class="btn bg-primary text-white rounded btn-sm" type="button" (click)="onNext()" translate>Next</button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="otp">
+                <div *ngIf="usePassword">
+
+                  <div class="form-group" >
+                    <div class="col-xs-12">
+                      <input class="form-control" id="login-password" placeholder="{{'Password' | translate}}" required type="password" autocomplete="off" name="password" [minlength]="6" #password="ngModel" [(ngModel)]="credentials.password" />
+                      
+                      <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                        <p [hidden]="!password.errors.minlength" class="error" translate>
+                          Password must be at least 6 characters!
+                        </p>
+                        <p [hidden]="!password.errors.required" class="error" translate>
+                          Password is required
+                        </p>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+
+                <div *ngIf="!usePassword">
+                  <div class="form-group" >
+                    <div class="col-xs-12">
+                      <div class="input-group ">
+                          <input class="form-control w-75" id="login-otp" placeholder="{{'OTP' | translate}}" required type="text" autocomplete="off" name="password" [minlength]="6" [maxlength]="6" #password="ngModel" (keypress)="onlyNumberKey($event)" [(ngModel)]="credentials.password" />
+                      </div>
+                      <div *ngIf="password.errors && (password.dirty || password.touched || submitted)">
+                        <p [hidden]="!password.errors.minlength" class="error" translate>
+                          OTP must be at least 6 characters!
+                        </p>
+                        <p [hidden]="!password.errors.required" class="error" translate>
+                          OTP is required
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group text-right mt-2" >
+                  
+                  <button class="btn bg-primary btn-sm text-white rounded" type="submit" translate>Log In</button>
+                  <button *ngIf = "!usePassword" class="btn bg-warning text-white btn-sm ml-2" type="button" (click)="resendOTP()">Click Here To Resend</button>
+
+                </div>
+              </div>
+              
+
+              <div class=" font-14">
+                <a  class="color-dark pull-left underline" (click)="showRegister()" translate>Register</a>
+                <a class="color-dark pull-right underline" (click)="forgetPassword()" translate>
+                  <span ></span>forgot password?
+                </a>
+              </div>
+              
+            
+            </form>
+          </article>
+        </div>
+
+        <div *ngIf="!showLogin">
+          <auth-forget-password (hide)="hideModal()" (showLogin)="onShowLogin()" (showRegister)="showRegister()"></auth-forget-password>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

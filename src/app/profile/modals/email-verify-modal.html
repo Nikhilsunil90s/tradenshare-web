@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <h4 class="modal-title" translate>Please verify your email </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #frm="ngForm" (submit)="submit(frm)">
+    <div class="form-group">
+      <input class="form-control"  name="token" pattern="[0-9]{6}$" placeholder="{{'Enter token value' | translate}}" [(ngModel)]="value" #token="ngModel" required/> 
+      <div *ngIf="token.errors">
+        <p *ngIf="token.errors.required"  class="small text-danger">Please enter token</p>
+        <p *ngIf="token.errors.pattern" class="small text-danger">Please enter Number only</p>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" type="submit" translate>Verify</button>&nbsp;
+      <button class="btn btn-warning" (click)="activeModal.close('Cancel')" translate type="button">Cancel</button>
+    </div>
+  </form>
+</div>

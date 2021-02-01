@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h4 class="modal-title" translate>Add Address </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form (submit)="submit(frm)" #frm="ngForm">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="Shop address" required type="text" autocomplete="off" name="address"
+            [(ngModel)]="shop.address" #address="ngModel" />
+          <div *ngIf="address.errors && (address.dirty || address.touched || submitted)">
+            <p [hidden]="!address.errors.required" class="error">
+              Address is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="Zipcode" required type="text" autocomplete="off" name="zipcode"
+            [(ngModel)]="shop.zipcode" #zipcode="ngModel" />
+          <div *ngIf="zipcode.errors && (zipcode.dirty || zipcode.touched || submitted)">
+            <p [hidden]="!zipcode.errors.required" class="error">
+              Zipcode is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="City" required type="text" autocomplete="off" name="city"
+            [(ngModel)]="shop.city" #city="ngModel" />
+          <div *ngIf="city.errors && (city.dirty || city.touched || submitted)">
+            <p [hidden]="!city.errors.required" class="error">
+              City is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="State" required type="text" autocomplete="off" name="state"
+            [(ngModel)]="shop.state" #state="ngModel" />
+          <div *ngIf="state.errors && (state.dirty || state.touched || submitted)">
+            <p [hidden]="!state.errors.required" class="error">
+              State is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input class="form-control" placeholder="Country (*)" required type="text" autocomplete="off" name="country"
+            [(ngModel)]="shop.country" #country="ngModel" />
+          <div *ngIf="country.errors && (country.dirty || country.touched || submitted)">
+            <p [hidden]="!country.errors.required" class="error">
+              Country is required
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

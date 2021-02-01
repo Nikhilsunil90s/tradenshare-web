@@ -1,0 +1,129 @@
+<div class="modal-header">
+  <h4 class="modal-title" translate>Add First Product </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form (submit)="submit(frm)" #frm="ngForm" *ngIf="product">
+    <div class="row">
+      <div class="col-12 ">
+        <div class="nav flex-column nav-pills nav-top-cus display-content float-left" role="tablist"
+          aria-orientation="vertical">
+          <a class="nav-link float-left" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true"
+            [ngClass]="{active: tab == 'info'}" (click)="changeTab('info')">Information</a>
+
+          <a class="nav-link float-left" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false"
+            [ngClass]="{active: tab == 'images'}" (click)="changeTab('images')">Images</a>
+
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="tab-content">
+          <div class="tab-pane" role="tabpanel" [ngClass]="{'show active': tab === 'info', hide: tab !== 'info'}">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Name (*)</label>
+                  <input type="text" name="productName" #productName="ngModel" class="form-control"
+                    placeholder="Enter name" [(ngModel)]="product.name" required (change)="changeAlias()" />
+                  <div *ngIf="productName.errors && (productName.dirty || productName.touched || isSubmitted)">
+                    <p [hidden]="!productName.errors.required" class="required-text">
+                      Please enter product name!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Category (*)</label>
+                  <select class="form-control" [(ngModel)]="product.categoryId" name="categoryId">
+                    <option value="">-- No category --</option>
+                    <option *ngFor="let item of tree" [ngValue]="item._id">{{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Product Type</label>
+                  <select class="form-control" [(ngModel)]="product.producttypeId" name="producttypeId">
+                    <option value="">-- No Product Type --</option>
+                    <option *ngFor="let item of productType" [ngValue]="item._id">{{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Price (*)</label>
+                  <input type="number" name="price" min="0.1" class="form-control" [(ngModel)]="product.price" required
+                    #price="ngModel" />
+                  <div *ngIf="price.errors && (price.dirty || price.touched || isSubmitted)">
+                    <p [hidden]="!price.errors.required" class="required-text">
+                      Price is required
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Short description</label>
+                  <textarea class="form-control" name="productsdesc" placeholder="Enter some text"
+                    [(ngModel)]="product.shortDescription"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+      
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="notification" [(ngModel)]="product.notification" />
+                      Notifications
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="publish" [(ngModel)]="product.publish" />
+                      Publish
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" role="tabpanel" [ngClass]="{'show active': tab === 'images', hide: tab !== 'images'}">
+            <h3>Click to set main image.</h3>
+            <div class="row">
+              <div class="col-md-3 text-center" *ngFor="let media of images; let i = index">
+                <img class="img-thumbnail" [src]="media.thumbUrl" [ngClass]="{selected: media._id === mainImage}" />
+
+                <div class="btn-group" role="group">
+                  <button class="btn btn-secondary" type="button" [ngClass]="{'btn-success' : media._id === mainImage}"
+                    (click)="setMain(media)">
+                    <i class="fa fa-check"></i>
+                  </button>
+                  <button class="btn btn-secondary" type="button" (click)="removeImage(media, i)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <media-select (onSelect)="selectImage($event)" [options]="imagesOptions"></media-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <hr />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
